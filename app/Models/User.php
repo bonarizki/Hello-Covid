@@ -22,5 +22,5 @@ class User extends Authenticatable
 
     
     protected $guarded = [];
-    
+
 }

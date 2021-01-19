@@ -144,6 +144,12 @@
             getIndonesiaCases()
 
             $('#table').DataTable({
+                "language": {
+                    "paginate": {
+                        "previous": "<<",
+                        "next" : ">>"
+                    }
+                },
                 ajax: {
                     url: "{{url('api/indonesia')}}"
                 },

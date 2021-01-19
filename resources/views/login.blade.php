@@ -55,6 +55,7 @@
                     </div>
                     <div class="card-body">
                         <form role="form" id="form">
+                            @csrf
                             <div class="form-group mb-3">
                                 <div class="input-group input-group-merge input-group-alternative">
                                     <div class="input-group-prepend">
@@ -62,21 +63,21 @@
                                     </div>
                                     <input class="form-control" placeholder="Email" type="email" name="email" id="email">
                                 </div>
+                                <small id="email_alert" class="form-text text-danger"></small>
                             </div>
                             <div class="form-group">
                                 <div class="input-group input-group-merge input-group-alternative">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                                        <span class="input-group-text" onclick="showpassword()" style="color: gray;cursor: pointer;"><i class="fa fa-eye-slash" id="iconpassword"></i></span>
                                     </div>
                                     <input class="form-control" placeholder="Password" type="password" id="password" name="password">
                                 </div>
+                                <small id="password_alert" class="form-text text-danger"></small>
                             </div>
-                            <div class="custom-control custom-control-alternative custom-checkbox">
-                                <input class="custom-control-input" id="remember_me" type="checkbox" name="remember_me">
-                                <label class="custom-control-label" for=" customCheckLogin">
-                                    <span class="text-muted">Remember me</span>
-                                </label>
-                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                                <label class="form-check-label" for="exampleCheck1">keep me login</label>
+                              </div>
                             <div class="text-center">
                                 <button type="button" class="btn btn-primary my-4" onclick="validasi()">Sign in</button>
                             </div>
@@ -99,22 +100,6 @@
                     </div>
                 </div>
                 <div class="col-xl-6">
-                    {{-- <ul class="nav nav-footer justify-content-center justify-content-xl-end">
-                        <li class="nav-item">
-                            <a href="https://www.creative-tim.com" class="nav-link" target="_blank">Creative Tim</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About
-                                Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md"
-                                class="nav-link" target="_blank">MIT License</a>
-                        </li>
-                    </ul> --}}
                 </div>
             </div>
         </div>
@@ -128,12 +113,80 @@
     <script src="{{asset('assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js')}}"></script>
     <!-- Argon JS -->
     <script src="{{asset('assets/js/argon.js?v=1.2.0')}}"></script>
+    <script src="{{asset('assets/js/validation.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script>
-        validasi = () =>{
-            let data = $('#form').serialize();
-            console.log(data)
+        $(document).ready(function () {
+
+        });
+
+        const data = {
+            create: {
+                url: "{{url('admin/login')}}",
+                method: "post"
+            }
         }
+
+        const validation = new valbon(data);
+
+        validasi = () => {
+            $('.is-invalid').removeClass('is-invalid');
+            $('.text-danger').empty();
+            let data = $('#form').serializeArray();
+            let result = validation.loopingValidasi(data);
+            if (result == 0) {
+                login();
+            } else {
+                validation.loopingErrorEmpty(result);
+            }
+        }
+
+        login = () => {
+            console.log(data.create.method)
+            $.ajax({
+                url: data.create.url,
+                type: data.create.method,
+                data: $('#form').serialize(),
+                success: (res) => {
+                    successRedirect(res.message);
+                },
+                error: (response) => {
+                    if (response.responseJSON.errors == null) {
+                        $(`#${response.responseJSON.data}_alert`).text(response.responseJSON.message)
+                        validation.sweetError(response.responseJSON.message)
+                    } else {
+                        let fail = response.responseJSON.errors;
+                        let key = Object.keys(fail)
+                        validation.loopingError(fail, key)
+                    }
+                }
+            })
+        }
+
+        showpassword = () => {
+            var x = document.getElementById("password");
+            if (x.type === "password") {
+                x.type = "text";
+                $('#iconpassword').removeClass('fa fa-eye-slash');
+                $('#iconpassword').addClass('fa fa-eye');
+            } else {
+                x.type = "password";
+                $('#iconpassword').removeClass('fa fa-eye');
+                $('#iconpassword').addClass('fa fa-eye-slash');
+            }
+        }
+
+        successRedirect = (message) => {
+            Swal.fire(
+                'Good job!',
+                message,
+                'success'
+            ).then((result) => {
+                window.location = "{{route('dashboard')}}";
+            })
+        }
+
     </script>
 </body>
 

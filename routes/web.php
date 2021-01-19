@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\loginController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\MitraController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +26,28 @@ Route::get('Indonesia-case',function(){
 
 Route::get('admin/login', function(){
     return view('login');
+})->name('login');
+
+Route::get('admin/logout',[loginController::class,'logout'])->name('logout');
+
+Route::post('admin/login',[loginController::class,'login']);
+
+Route::middleware(['auth'])->group(function () {
+
+    // Dashboard
+    Route::get('admin/dashboard',function(){
+        return view('pages-admin/dashboard');
+    })->name('dashboard');
+
+    //MitraRs
+    Route::get('admin/mitra',function(){
+        return view('pages-admin/mitra');
+    })->name('mitra');
+
+    Route::resource('admin/mitra-rs', MitraController::class)->except([
+        'update', 'destroy'
+    ]);
+    
+    Route::put('admin/mitra-rs', [MitraController::class,'update']);
+    Route::delete('admin/mitra-rs', [MitraController::class,'destroy']);
 });
