@@ -96,13 +96,13 @@
                             <span class="nav-link-inner--text">Indonesia Case</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="login.html" class="nav-link">
                             <span class="nav-link-inner--text">About covid</span>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
-                        <a href="register.html" class="nav-link">
+                        <a href="{{url('mitra-all')}}" class="nav-link">
                             <span class="nav-link-inner--text">Mitra Covid</span>
                         </a>
                     </li>
