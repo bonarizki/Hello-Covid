@@ -25,7 +25,7 @@
                 <div class="card shadow" width="100%" >
                     <div class="card-body">
                     <h1 class="card-title">{{$item->mitra_name}} </h1>
-                    <p class="card-text">Jasa : {{$item->mitra_type}}</p>
+                    <p class="card-text">Jasa : {{$item->mitra_type=='all' ? 'swab, rapid' : $item->mitra_type}}</p>
                     <p class="card-text">Telephone No : {{$item->mitra_phone}}</p>
                     <p class="card-text">Alamat : {{$item->mitra_address}}</p>
                     </div>
