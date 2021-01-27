@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\loginController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\MitraController;
+use App\Models\MitraRs;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,11 @@ Route::get('admin/logout',[loginController::class,'logout'])->name('logout');
 
 Route::post('admin/login',[loginController::class,'login']);
 
+// Route::get('mitra-covid',function(){
+//     return view('pages/mitra-covid');
+// });
+route::get('mitra-all',[MitraController::class,'getMitra'])->name('Mitra-All');
+
 Route::middleware(['auth'])->group(function () {
 
     // Dashboard
@@ -50,4 +56,6 @@ Route::middleware(['auth'])->group(function () {
     
     Route::put('admin/mitra-rs', [MitraController::class,'update']);
     Route::delete('admin/mitra-rs', [MitraController::class,'destroy']);
+
+    
 });

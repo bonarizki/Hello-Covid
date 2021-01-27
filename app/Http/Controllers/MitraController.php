@@ -7,6 +7,7 @@ use App\Models\MitraRs;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class MitraController extends Controller
 {
@@ -114,4 +115,11 @@ class MitraController extends Controller
             ]
         ]);
     }
+
+    public function getMitra()
+    {
+        $data =  DB::table('mitra_rs')
+        ->paginate(5);
+        return view('pages/mitra-covid',compact('data'));
+    }   
 }
