@@ -57,5 +57,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('admin/mitra-rs', [MitraController::class,'update']);
     Route::delete('admin/mitra-rs', [MitraController::class,'destroy']);
 
+    Route::get('download-mitra',[MitraController::class,'downloadMitra']);
     
 });

@@ -50,8 +50,10 @@
                     </div>
                     <div class="col-2 d-flex flex-row-reverse">
                         <button class="btn btn-primary btn-sm">
-                            <i class="fa fa-download" aria-hidden="true"></i>
-                            Download Mitra
+                            <a href="{{url('download-mitra')}}" target="_blank" style="color: white">
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                                Download Mitra
+                            </a>
                         </button>
                     </div>
                 </div>

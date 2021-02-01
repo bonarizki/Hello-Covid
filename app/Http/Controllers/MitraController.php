@@ -8,6 +8,9 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Exports\mitra;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class MitraController extends Controller
 {
@@ -121,5 +124,10 @@ class MitraController extends Controller
         $data =  DB::table('mitra_rs')
         ->paginate(5);
         return view('pages/mitra-covid',compact('data'));
-    }   
+    }
+    
+    public function downloadMitra()
+    {
+        return Excel::download(new mitra(),'Data Mitra.xlsx');
+    }
 }
