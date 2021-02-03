@@ -43,7 +43,7 @@
                         </button>
                     </div>
                     <div class="col-2 d-flex flex-row-reverse">
-                        <button class="btn btn-info btn-sm">
+                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-upload">
                             <i class="fa fa-upload" aria-hidden="true"></i>
                             Upload Mitra
                         </button>
@@ -79,6 +79,8 @@
         </div>
     </div>
 </div>
+
+
 @endsection
 
 @section('modal')
@@ -128,6 +130,34 @@
                 <button type="button" class="btn btn-primary" id="btn-save">Save</button>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-upload" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form id="form-upload" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="exampleFormControlFile1">upload mitra</label>
+                    <input type="file" class="form-control-file" id="file">
+                    <small class="form-text text-muted">
+                        <a href="">Download Template</a> 
+                    </small>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="upload()">Upload</button>
+        </div>
+      </div>
     </div>
 </div>
 @endsection
@@ -213,6 +243,32 @@
         }
 
         const validation = new valbon(data);
+
+        upload = () => {
+            let file = $('#file').val();
+            if (file != '') {
+                let formData = new FormData()
+                file = $('#file')[0].files[0]
+                formData.append('file', file);
+                formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+                $.ajax({
+                    url: "{{url('upload/mitra')}}",
+                    type: 'post',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: (response) => {
+                        $(`#table`).DataTable().ajax.reload();
+                        $('#modal-upload').modal('hide');
+                        validation.sweetSuccess(response.message,response.data.message);
+                    },
+                });
+            }else{
+                validation.sweetError("form can't be empty");
+            }
+            
+        }
+
 
         modal = (type,id) => {
             console.log(id)

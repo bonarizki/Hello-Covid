@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Exports\mitra;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Imports\MitraImport;
 
 class MitraController extends Controller
 {
@@ -129,5 +129,17 @@ class MitraController extends Controller
     public function downloadMitra()
     {
         return Excel::download(new mitra(),'Data Mitra.xlsx');
+    }
+
+    public function uploadMitra(Request $request)
+    {
+        $file = $request->file('file');
+        Excel::import(new MitraImport ,$file, null, \Maatwebsite\Excel\Excel::XLSX);
+        return response()->json([
+            "message" => "success",
+            "data" => [
+                "message" => "Upload Success"
+            ]
+        ]);
     }
 }
